@@ -32,6 +32,12 @@ app.use(bodyParser.raw({ verify: rawBodySaver, type: "*/*" }));
 app.use(express.json(), express.urlencoded({ extended: false }), express.raw());
 app.use(cors());
 
+app.use(
+  hpp({
+    whitelist: ["price", "countInStock", "countInStock", "rating"],
+  })
+);
+
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
