@@ -9,28 +9,20 @@ const { notFound, errorHandler } = require("./middleware/errorMiddleware.js");
 const mountRoutes = require("./routes/indexRoutes.js");
 const connectDB = require("./config/db.js");
 
-//Load environment variables from .env file
 require("dotenv").config();
-
-// Connect to database
 connectDB();
 
-// Initialize express app
 const app = express();
 
-// Use cors to allow cross origin requests between frontend and backend
 app.use(cors());
 app.options("*", cors());
 
-// Use compression to compress the response body => faster response time
 app.use(compression());
 
-// Logger middleware for development environment only
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-// Body parser middleware to parse the request body into json format
 var rawBodySaver = function (req, res, buf, encoding) {
   if (buf && buf.length) {
     req.rawBody = buf.toString(encoding || "utf8");
@@ -42,17 +34,14 @@ app.use(bodyParser.urlencoded({ verify: rawBodySaver, extended: true }));
 app.use(bodyParser.raw({ verify: rawBodySaver, type: "*/*" }));
 app.use(express.json(), express.urlencoded({ extended: false }), express.raw());
 
-// Secure from hpp request attacks
 app.use(
   hpp({
     whitelist: ["price", "countInStock", "countInStock", "rating"],
   })
 );
 
-// Use rate limiter to limit the number of requests per IP address
 app.use("/api", requestsLimiter);
 
-// Mount all routes
 mountRoutes(app);
 
 var __dirname = path.resolve();
@@ -71,7 +60,6 @@ if (process.env.NODE_ENV === "production") {
 
 // app.use(notFound);
 
-// Error handler middleware
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;

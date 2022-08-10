@@ -1,6 +1,5 @@
 const rateLimit = require("express-rate-limit");
 
-// Modify x-rate-limit in the headers (brute force/ DDOS protection)
 var countMax = 6;
 const requestsLimiter = rateLimit({
   max: countMax,
