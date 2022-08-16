@@ -8,6 +8,8 @@ const bodyParser = require("body-parser");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware.js");
 const mountRoutes = require("./routes/indexRoutes.js");
 const connectDB = require("./config/db.js");
+const apicache = require("apicache");
+let cache = apicache.middleware;
 
 require("dotenv").config();
 connectDB();
@@ -18,6 +20,8 @@ app.use(cors());
 app.options("*", cors());
 
 app.use(compression());
+
+app.use(cache("5 minutes"));
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
